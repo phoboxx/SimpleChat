@@ -19,7 +19,7 @@ socket.on('roomUsers', ({ room, users }) => {
   outputUsers(users);
 });
 
-// Message from server
+// Get message from server
 socket.on('message', (message) => {
   console.log(message);
   outputMessage(message);
