@@ -58,6 +58,12 @@ io.on('connection', (socket) => {
         'message',
         formatMessage(botName, `${user.username} has left the chat`)
       );
+
+      // Update users in the room on the frontend
+      io.to(user.room).emit('roomUsers', {
+        room: user.room,
+        users: getRoomUsers(user.room),
+      });
     }
   });
 });
