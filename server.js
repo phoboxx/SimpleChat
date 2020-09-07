@@ -40,9 +40,13 @@ io.on('connection', (socket) => {
 
     socket.join(user.room);
 
+    // Get all previous messages
     getMessagesFromDB(room).then((message) => {
       message.forEach((message) =>
-        socket.emit('message', formatMessage(message.user, message.message))
+        socket.emit(
+          'message',
+          formatMessage(message.user, message.message, message.date)
+        )
       );
     });
 

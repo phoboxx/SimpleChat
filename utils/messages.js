@@ -1,12 +1,17 @@
 const moment = require('moment');
 const Message = require('../models/Message');
-const mongoose = require('mongoose');
 
-function formatMessage(username, text) {
+function formatMessage(username, text, time) {
+  if (time) {
+    var time = moment(time).format('h:mm a');
+  } else {
+    var time = moment().format('h:mm a');
+  }
+
   return {
     username,
     text,
-    time: moment().format('h:mm a'),
+    time,
   };
 }
 
