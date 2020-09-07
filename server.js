@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require('path');
 const http = require('http');
 const express = require('express');
@@ -9,10 +10,24 @@ const {
   userLeave,
   getRoomUsers,
 } = require('./utils/users');
+const Message = require('./models/Message');
+const mongoose = require('mongoose');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
+// Connect to DB
+
+try {
+  mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  console.log('Successfully conected to DB');
+} catch (err) {
+  console.error(err);
+}
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
