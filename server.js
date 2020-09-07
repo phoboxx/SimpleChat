@@ -48,10 +48,9 @@ io.on('connection', (socket) => {
           formatMessage(message.user, message.message, message.date)
         )
       );
+      // Welcome message
+      socket.emit('message', formatMessage(botName, 'Welcome to SimpleChat'));
     });
-
-    // Welcome message
-    socket.emit('message', formatMessage(botName, 'Welcome to SimpleChat'));
 
     // Broadcast when a user connects
     socket.broadcast
