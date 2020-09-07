@@ -3,7 +3,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-const formatMessage = require('./utils/messages');
+const { formatMessage, getMessagesFromDB } = require('./utils/messages');
 const {
   userJoin,
   getCurrentUser,
@@ -18,7 +18,6 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 // Connect to DB
-
 try {
   mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -40,6 +39,12 @@ io.on('connection', (socket) => {
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
+
+    getMessagesFromDB(room).then((message) => {
+      message.forEach((message) =>
+        socket.emit('message', formatMessage(message.user, message.message))
+      );
+    });
 
     // Welcome message
     socket.emit('message', formatMessage(botName, 'Welcome to SimpleChat'));
